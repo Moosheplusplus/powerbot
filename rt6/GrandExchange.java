@@ -15,7 +15,7 @@ import org.powerbot.script.rt6.Game.Crosshair;
 
 public class GrandExchange extends ClientAccessor implements MessageListener {
 	
-	public static final int[] GE_CLERK = {1419, 2593, 2240, 2241};
+	public static final String GE_CLERK = "Grand Exchange clerk";
 	public static final int
 			WIDGET = 105,
 				PROGRESS_OFFSET = 17,
@@ -54,7 +54,7 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 		if(opened())
 			return true;
 		
-		ctx.npcs.select().id(GE_CLERK).nearest();
+		ctx.npcs.select().name(GE_CLERK).nearest();
 		if(ctx.npcs.isEmpty())
 			return false;
 		
