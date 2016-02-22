@@ -21,6 +21,7 @@ public class ClientContext extends org.powerbot.script.ClientContext<Client> {
 	public final DepositBox depositBox;
 	public final Equipment equipment;
 	public final Game game;
+	public final GrandExchange grandExchange;
 	public final GroundItems groundItems;
 	public final Inventory inventory;
 	public final Magic magic;
@@ -51,6 +52,7 @@ public class ClientContext extends org.powerbot.script.ClientContext<Client> {
 		depositBox = new DepositBox(this);
 		equipment = new Equipment(this);
 		game = new Game(this);
+		grandExchange = new GrandExchange(this);
 		groundItems = new GroundItems(this);
 		inventory = new Inventory(this);
 		magic = new Magic(this);
@@ -80,6 +82,7 @@ public class ClientContext extends org.powerbot.script.ClientContext<Client> {
 		depositBox = ctx.depositBox;
 		equipment = ctx.equipment;
 		game = ctx.game;
+		grandExchange = ctx.grandExchange;
 		groundItems = ctx.groundItems;
 		inventory = ctx.inventory;
 		magic = ctx.magic;
