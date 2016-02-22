@@ -138,12 +138,10 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 				QUERY_COMPONENT).component(QUERY_SELECT_COMPONENT);
 		if(query.text().isEmpty() || !query.click())
 			return false;
-		ctx.controller.script().log.info("Query text wasn't and it was clicked");
 
 		if(!matchesTitle(item))
 			return false;
 		
-		ctx.controller.script().log.info("Text now matches");
 
 		return setQuantity(amount) && setPrice(price) && confirm();
 	}
