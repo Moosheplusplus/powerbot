@@ -2,6 +2,8 @@ package org.powerbot.script.rt6;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.powerbot.bot.rt6.client.Client;
 import org.powerbot.bot.rt6.client.Floor;
@@ -284,7 +286,7 @@ public class Game extends ClientAccessor {
 		final float offY = (ty * 4 - r.z() / 128) + 2;
 		final int d = (int) Math.round(Math.sqrt(Math.pow(offX, 2) + Math.pow(offY, 2)));
 
-		final Component component = ctx.widgets.component(org.powerbot.script.rt6.Constants.MOVEMENT_WIDGET, org.powerbot.script.rt6.Constants.MOVEMENT_MAP);
+		final Component component = mapComponent();
 		final int w = component.scrollWidth();
 		final int h = component.scrollHeight();
 		final int radius = Math.max(w / 2, h / 2) + 10;
@@ -324,9 +326,8 @@ public class Game extends ClientAccessor {
 				}
 			} else {
 				final Rectangle rbuffer = new Rectangle(p.x - 6, p.y - 6, 12, 12);//entire tile and a half sized 'buffer' area
-				for (final int pos : new int[]{org.powerbot.script.rt6.Constants.MOVEMENT_COMPASS, org.powerbot.script.rt6.Constants.MOVEMENT_RUN,
-						org.powerbot.script.rt6.Constants.MOVEMENT_HOME_TELEPORT, org.powerbot.script.rt6.Constants.MOVEMENT_WORLD_MAP}) {
-					if (ctx.widgets.component(org.powerbot.script.rt6.Constants.MOVEMENT_WIDGET, pos).viewportRect().intersects(rbuffer)) {
+				for (final Component blocking : mapBlockingComponents()) {
+					if (blocking.viewportRect().intersects(rbuffer)) {
 						return bad;
 					}
 				}
@@ -397,6 +398,42 @@ public class Game extends ClientAccessor {
 			}
 		}
 		return new Viewport(0, 0, 0, 0);
+	}
+
+	public Component mapComponent() {
+		final Widget i = ctx.widgets.widget(Constants.MOVEMENT_WIDGET);
+		for (final Component c : i.components()) {
+			if (c.contentType() == 1338) {
+				return c;
+			}
+		}
+		return ctx.widgets.component(Constants.MOVEMENT_WIDGET, Constants.MOVEMENT_MAP);
+	}
+
+	private List<Component> mapBlockingComponents() {
+		final List<Component> ret = new ArrayList<Component>();
+		final Widget widget = ctx.widgets.widget(Constants.MOVEMENT_WIDGET);
+		final int[][] bounds = new int[][]{
+				{36, 36},
+				{44, 44},
+				{30, 30},
+		};
+
+		for (final Component c : widget.components()) {
+			if (!c.visible()) {
+				continue;
+			}
+
+			final int w = c.width(), h = c.height();
+			for (final int[] b : bounds) {
+				if (b[0] == w && b[1] == h) {
+					ret.add(c);
+					break;
+				}
+			}
+		}
+
+		return ret;
 	}
 
 	/**

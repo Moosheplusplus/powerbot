@@ -2,7 +2,7 @@ package org.powerbot.script;
 
 /**
  * Textable
- * An entity which contains a test description.
+ * An entity which contains a text description.
  */
 public interface Textable {
 	/**

@@ -15,30 +15,29 @@ import org.powerbot.script.rt6.Game.Crosshair;
 
 public class GrandExchange extends ClientAccessor implements MessageListener {
 	
-	public static final String GE_CLERK = "Grand Exchange clerk";
-	public static final int
-			WIDGET = 105,
-				PROGRESS_OFFSET = 17,
-				PROGRESS_BAR = 3,
-				PROGRESS_TOTAL = 4,
-				LABEL_COMPONENT = 13,
-				SEARCH_COMPONENT = 302,
-				QUERY_COMPONENT = 53,
-				QUANTITY_INPUT_COMPONENT = 290,
-				QUANTITY_COMPONENT = 292,
-				PRICE_INPUT_COMPONENT = 296,
-				PRICE_COMPONENT = 298,
-				CONFIRM_COMPONENT = 171,
-				SELL_TEXTURE = 1168,
-				BUY_TEXTURE = 1170,
-			BACKPACK_WIDGET = 107,
-				BACKPACK_COMPONENT = 7,
-			HUD_WIDGET = 1477,
-				CLOSE_COMPONENT = 483,
-				CLOSE_SUBCOMPONENT = 1,
-			COLLECTION_WIDGET = 651,
-				COLLECT_BACKPACK_COMPONENT = 9,
-				COLLECT_BANK_COMPONENT = 17;
+	public static final String 	GE_CLERK 			= "Grand Exchange clerk";
+	public static final int		WIDGET				= 105;
+	public static final int		PROGRESS_OFFSET			= 17;
+	public static final int		PROGRESS_BAR			= 3;
+	public static final int		PROGRESS_TOTAL			= 4;
+	public static final int		LABEL_COMPONENT			= 13;
+	public static final int		SEARCH_COMPONENT		= 302;
+	public static final int		QUERY_COMPONENT			= 53;
+	public static final int		QUANTITY_INPUT_COMPONENT	= 290;
+	public static final int		QUANTITY_COMPONENT		= 292;
+	public static final int		PRICE_INPUT_COMPONENT		= 296;
+	public static final int		PRICE_COMPONENT			= 298;
+	public static final int		CONFIRM_COMPONENT		= 171;
+	public static final int		SELL_TEXTURE			= 1168;
+	public static final int		BUY_TEXTURE			= 1170;
+	public static final int		BACKPACK_WIDGET			= 107;
+	public static final int		BACKPACK_COMPONENT		= 7;
+	public static final int		HUD_WIDGET			= 1477;
+	public static final int		CLOSE_COMPONENT			= 483;
+	public static final int		CLOSE_SUBCOMPONENT		= 1;
+	public static final int		COLLECTION_WIDGET		= 651;
+	public static final int		COLLECT_BACKPACK_COMPONENT	= 9;
+	public static final int		COLLECT_BANK_COMPONENT		= 17;
 	
 	public GrandExchange(final ClientContext ctx) {
 		super(ctx);
@@ -102,12 +101,12 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 	/**
 	 * Buys an item from the grand exchange.
 	 * 
-	 * @param item The item name to search for
+	 * @param item The item id to search for
 	 * @param amount The amount of the item to buy
 	 * @param price The price to buy each item at
 	 * @return true if the item has been successfully listed
 	 */
-	public boolean buy(final String item, final int amount, final int price) {
+	public boolean buy(final int item, final int amount, final int price) {
 		if(!opened())
 			return false;
 
@@ -123,7 +122,11 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 		}, 100, 25))
 			return false;
 		
-		ctx.input.sendln(item.toLowerCase());
+		final CacheItemConfig cic = CacheItemConfig.load(item);
+		if (!cic.valid())
+			return false;
+
+		ctx.input.send(cic.name.toLowerCase());
 		
 		if(!Condition.wait(new Callable<Boolean>() {
 			public Boolean call() {
@@ -137,11 +140,13 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 		if(!query.component(0).text().isEmpty())
 			return false;
 		
-		for(Component c : query.components())
-			if(c.text().equalsIgnoreCase(item) && c.click())
+		Component[] results = query.components();
+
+		for (int i = 0, j = results.length; i < j; i++)
+			if ((results[i].itemId() == item) && results[i - 1].click())
 				break;
-		
-		if(!matchesTitle(item))
+
+		if (!matchesTitle(cic.name))
 			return false;
 		
 		return setQuantity(amount) && setPrice(price) && confirm();
@@ -316,7 +321,7 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 	
 	private void dispatch(final GeEvent event, final GeEvent.Type type) {
 		for(EventListener l : ctx.dispatcher) {
-			if(l instanceof GeListener)
+			if(!(l instanceof GeListener))
 				continue;
 			GeListener listener = (GeListener) l;
 			switch(type) {
