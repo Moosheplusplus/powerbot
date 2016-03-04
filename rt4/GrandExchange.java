@@ -15,30 +15,29 @@ import org.powerbot.script.rt4.Game.Crosshair;
 
 public class GrandExchange extends ClientAccessor implements MessageListener {
 	
-	public static final String GE_CLERK = "Grand Exchange Clerk";
-	public static final int
-			WIDGET = 465,
-				SLOT_OFFSET = 7,
-					PROGRESS_BAR = 21,
-					PROGRESS_TOTAL = 22,
-					BUY_COMPONENT = 0,
-					SELL_COMPONENT = 1,
-				INPUT_COMPONENT = 24,
-					LABEL_COMPONENT = 25,
-					QUANTITY_INPUT_COMPONENT = 32,
-					QUANTITY_COMPONENT = 49,
-					PRICE_INPUT_COMPONENT = 43,
-					PRICE_COMPONENT = 52,
-					CONFIRM_COMPONENT = 54,
-				COLLECT_COMPONENT = 6,
-					COLLECT_SUBCOMPONENT = 1,
-				CLOSE_COMPONENT = 2,
-				CLOSE_SUBCOMPONENT = 11,
-			SEARCH_WIDGET = 162,
-				SEARCH_COMPONENT = 33,
-				QUERY_COMPONENT = 38,
-					QUERY_SELECT_COMPONENT = 1,
-				SEARCH_LABEL_COMPONENT = 32;
+	public static final String 	GE_CLERK 			= "Grand Exchange Clerk";
+	public static final int		WIDGET 				= 465;
+	public static final int		SLOT_OFFSET 			= 7;
+	public static final int		PROGRESS_BAR 			= 21;
+	public static final int		PROGRESS_TOTAL 			= 22;
+	public static final int		BUY_COMPONENT 			= 0;
+	public static final int		SELL_COMPONENT 			= 1;
+	public static final int		INPUT_COMPONENT 		= 24;
+	public static final int		LABEL_COMPONENT 		= 25;
+	public static final int		QUANTITY_INPUT_COMPONENT 	= 32;
+	public static final int		QUANTITY_COMPONENT 		= 49;
+	public static final int		PRICE_INPUT_COMPONENT 		= 43;
+	public static final int		PRICE_COMPONENT 		= 52;
+	public static final int		CONFIRM_COMPONENT 		= 54;
+	public static final int		COLLECT_COMPONENT 		= 6;
+	public static final int		COLLECT_SUBCOMPONENT 		= 1;
+	public static final int		CLOSE_COMPONENT 		= 2;
+	public static final int		CLOSE_SUBCOMPONENT 		= 11;
+	public static final int		SEARCH_WIDGET 			= 162;
+	public static final int		SEARCH_COMPONENT 		= 33;
+	public static final int		QUERY_COMPONENT 		= 38;
+	public static final int		QUERY_SELECT_COMPONENT 		= 1;
+	public static final int		SEARCH_LABEL_COMPONENT 		= 32;
 	
 	public GrandExchange(final ClientContext ctx) {
 		super(ctx);
@@ -102,12 +101,12 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 	/**
 	 * Buys an item from the grand exchange.
 	 * 
-	 * @param item The item name to search for
+	 * @param item The item id to search for
 	 * @param amount The amount of the item to buy
 	 * @param price The price to buy each item at
 	 * @return true if the item has been successfully listed
 	 */
-	public boolean buy(final String item, final int amount, final int price) {
+	public boolean buy(final int item, final int amount, final int price) {
 		if(!opened())
 			return false;
 
@@ -123,8 +122,12 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 			}
 		}, 100, 25))
 			return false;
+			
+		final CacheItemConfig cic = CacheItemConfig.load(item);
+		if (!cic.valid())
+			return false;
 		
-		ctx.input.sendln(item.toLowerCase());
+		ctx.input.send(cic.name.toLowerCase());
 		
 		if(!Condition.wait(new Callable<Boolean>() {
 			public Boolean call() {
@@ -134,10 +137,19 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 		}, 100, 30))
 			return false;
 		
-		Component query = ctx.widgets.component(SEARCH_WIDGET,
-				QUERY_COMPONENT).component(QUERY_SELECT_COMPONENT);
-		if(query.text().isEmpty() || !query.click())
-			return false;
+		Component query = ctx.widgets.component(SEARCH_WIDGET, QUERY_COMPONENT);
+		
+		Component[] results = query.components();
+		
+		int itemID = cic.noted ? item - 1 : item;
+		final CacheItemConfig cicn = CacheItemConfig.load(itemID);
+		
+		if(! (cicn.valid() && cicn.name.equals(cic.name)) )
+			itemID = item;
+
+		for (int i = 0, j = results.length; i < j; i++)
+			if ((results[i].itemId() == itemID) && results[i - 2].click())
+				break;
 
 		if(!matchesTitle(item))
 			return false;
@@ -300,7 +312,7 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 	
 	private void dispatch(final GeEvent event, final GeEvent.Type type) {
 		for(EventListener l : ctx.dispatcher) {
-			if(l instanceof GeListener)
+			if(!(l instanceof GeListener))
 				continue;
 			GeListener listener = (GeListener) l;
 			switch(type) {
