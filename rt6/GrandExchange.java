@@ -316,7 +316,7 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 	
 	private void dispatch(final GeEvent event, final GeEvent.Type type) {
 		for(EventListener l : ctx.dispatcher) {
-			if(l instanceof GeListener)
+			if(!(l instanceof GeListener))
 				continue;
 			GeListener listener = (GeListener) l;
 			switch(type) {
