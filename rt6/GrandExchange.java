@@ -141,9 +141,15 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 			return false;
 		
 		Component[] results = query.components();
+		
+		int itemID = cic.noted ? item - 1 : item;
+		final CacheItemConfig cicn = CacheItemConfig.load(itemID);
+		
+		if(! (cicn.valid() && cicn.name.equals(cic.name)) )
+			itemID = item;
 
 		for (int i = 0, j = results.length; i < j; i++)
-			if ((results[i].itemId() == item) && results[i - 1].click())
+			if ((results[i].itemId() == itemID) && results[i - 1].click())
 				break;
 
 		if (!matchesTitle(cic.name))
