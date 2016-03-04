@@ -13,6 +13,13 @@ public class Widget extends ClientAccessor implements Identifiable, Validatable 
 	private final int index;
 	private Component[] sparseCache;
 
+	/**
+	 * Represents an interactive display window which stores {@link Component}s
+	 * and miscellaneous data.
+	 * 
+	 * @param ctx The {@link ClientContext}
+	 * @param index The Widget index
+	 */
 	Widget(final ClientContext ctx, final int index) {
 		super(ctx);
 		this.index = index;
@@ -27,6 +34,13 @@ public class Widget extends ClientAccessor implements Identifiable, Validatable 
 		return index;
 	}
 
+	/**
+	 * Gets the component at the specified index.
+	 * 
+	 * @param index The index of the component
+	 * @return The component at the specified index, or <code>nil</code> if the
+	 * component does not exist.
+	 */
 	public synchronized Component component(final int index) {
 		if (index < 0) {
 			return new Component(ctx, this, -1);
@@ -55,6 +69,11 @@ public class Widget extends ClientAccessor implements Identifiable, Validatable 
 		return 0;
 	}
 
+	/**
+	 * An array of the nested components within the widget.
+	 * 
+	 * @return A {@link Component} array
+	 */
 	public Component[] components() {
 		final int len = componentCount();
 		if (len <= 0) {
@@ -64,6 +83,9 @@ public class Widget extends ClientAccessor implements Identifiable, Validatable 
 		return Arrays.copyOf(sparseCache, len);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean valid() {
 		if (index < 1) {

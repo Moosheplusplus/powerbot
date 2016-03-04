@@ -141,12 +141,12 @@ public final class Constants {
 	public static final int LOBBY_TEXTURE_LOOTSHARE = 18694;
 
 	public static final int MOVEMENT_WIDGET = 1465;
-	public static final int MOVEMENT_MAP = 1;
-	public static final int MOVEMENT_RUN = 45;
-	public static final int MOVEMENT_WORLD_MAP = 42;
-	public static final int MOVEMENT_RUN_ENERGY = 50;
-	public static final int MOVEMENT_COMPASS = 52;
-	public static final int MOVEMENT_HOME_TELEPORT = 56;
+	public static final int MOVEMENT_MAP = 0;
+	public static final int MOVEMENT_RUN = 47;
+	public static final int MOVEMENT_WORLD_MAP = 43;
+	public static final int MOVEMENT_RUN_ENERGY = 51;
+	public static final int MOVEMENT_COMPASS = 55;
+	public static final int MOVEMENT_HOME_TELEPORT = 57;
 	public static final int MOVEMENT_RUN_STATE = 463;
 
 	public static final int POWERS_PRAYER_POINTS = 3274;

@@ -38,6 +38,13 @@ public final class TileMatrix extends Interactive implements InteractiveEntity {
 		});
 	}
 
+	/**
+	 * A default point which represents the centered position with the given
+	 * height.
+	 * 
+	 * @param height The hieght in which to return the point from
+	 * @return A point which represents (0.5, 0.5, <code>height</code>)
+	 */
 	public Point point(final int height) {
 		return point(0.5d, 0.5d, height);
 	}
@@ -47,11 +54,21 @@ public final class TileMatrix extends Interactive implements InteractiveEntity {
 		return base != null ? ctx.game.worldToScreen((int) ((tile.x() - base.x() + modX) * 128d), (int) ((tile.y() - base.y() + modY) * 128d), height) : new Point(-1, -1);
 	}
 
-	@Deprecated
+	/**
+	 * @deprecated
+	 * Kept for backwards compatibility.
+	 * 
+	 * @return value of {@link #bounds()}
+	 */
 	public Polygon getBounds() {
 		return bounds();
 	}
 
+	/**
+	 * Represents the model bounds as a {@link Polygon}
+	 * 
+	 * @return A {@link Polygon}
+	 */
 	public Polygon bounds() {
 		final Point tl = point(0.0D, 0.0D, 0);
 		final Point tr = point(1.0D, 0.0D, 0);
@@ -75,10 +92,21 @@ public final class TileMatrix extends Interactive implements InteractiveEntity {
 		};
 	}
 
+	/**
+	 * Returns the point of which the tile exists on the map.
+	 * 
+	 * @return A {@link Point}
+	 */
 	public Point mapPoint() {
 		return ctx.game.tileToMap(tile);
 	}
 
+	/**
+	 * Whether or not the tile is on the map.
+	 * 
+	 * @return <code>true</code> if the tile is loaded on the map, otherwise,
+	 * <code>false</code>.
+	 */
 	public boolean onMap() {
 		final boolean r = ctx.game.resizable();
 		final Point centre = ctx.game.mapComponent().centerPoint();
@@ -92,6 +120,13 @@ public final class TileMatrix extends Interactive implements InteractiveEntity {
 				Math.pow(centre.x - p.x, 2) + Math.pow(centre.y + 54 - p.y, 2) < Math.pow(16, 2);
 	}
 
+	/**
+	 * Generates a tile path to determine if the local player can reach the
+	 * Tile Matrix.
+	 * 
+	 * @return <code>true</code> if the tile matrix is reachable, otherwise,
+	 * <code>false</code>.
+	 */
 	public boolean reachable() {
 		return ctx.movement.reachable(ctx.players.local().tile(), tile);
 	}

@@ -220,6 +220,10 @@ public class Lobby extends ClientAccessor {
 			this.ping = ping;
 		}
 
+		public int componentIndex() {
+			return index;
+		}
+
 		public int number() {
 			return number;
 		}
