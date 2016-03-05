@@ -117,15 +117,15 @@ public final class Constants {
 	public static final int HUD_MENU_WINDOWS_LIST = 4;
 
 	public static final int LOBBY_WIDGET = 906;
-	public static final int LOBBY_PLAY = 154;
-	public static final int LOBBY_CURRENT_WORLD = 513;
-	public static final int LOBBY_CLOSE = 488;
+	public static final int LOBBY_PLAY = 155;
+	public static final int LOBBY_CURRENT_WORLD = 514;
+	public static final int LOBBY_CLOSE = 489;
 	public static final int LOBBY_CLOSE_SUB = 1;
-	public static final int LOBBY_TABS = 485;
+	public static final int LOBBY_TABS = 486;
 	public static final int LOBBY_TAB_START = 3;
 	public static final int LOBBY_TAB_LENGTH = 4;
 	public static final int LOBBY_TAB_CURRENT = 27;
-	public static final int LOBBY_ERROR = 473;
+	public static final int LOBBY_ERROR = 474;
 	public static final int LOBBY_WORLDS = 910;
 	public static final int LOBBY_WORLDS_VIEWPORT = 68;
 	public static final int LOBBY_WORLDS_BARS = 70;
