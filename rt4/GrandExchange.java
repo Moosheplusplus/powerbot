@@ -3,17 +3,12 @@ package org.powerbot.script.rt4;
 import java.util.*;
 import java.util.concurrent.Callable;
 
-
-import org.powerbot.script.GeEvent;
-import org.powerbot.script.GeListener;
 import org.powerbot.script.Condition;
-import org.powerbot.script.MessageEvent;
-import org.powerbot.script.MessageListener;
 import org.powerbot.script.Random;
 import org.powerbot.script.rt4.*;
 import org.powerbot.script.rt4.Game.Crosshair;
 
-public class GrandExchange extends ClientAccessor implements MessageListener {
+public class GrandExchange extends ClientAccessor {
 	
 	public static final String 	GE_CLERK 			= "Grand Exchange Clerk";
 	public static final int		WIDGET 				= 465;
@@ -41,7 +36,6 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 	
 	public GrandExchange(final ClientContext ctx) {
 		super(ctx);
-		ctx.dispatcher.add(this);
 	}
 	
 	/**
@@ -291,38 +285,5 @@ public class GrandExchange extends ClientAccessor implements MessageListener {
 		if(slot < 0 || slot > 7)
 			return ctx.widgets.nil().component(0);
 		return ctx.widgets.component(WIDGET, SLOT_OFFSET + slot);
-	}
-
-	@Override
-	public void messaged(final MessageEvent e) {
-		if(e.source().isEmpty() || opened() || !e.text()
-				.contains("Grand Exchange"))
-			return;
-		String[] tokens = e.text().split(" ");
-		double progress = 1.0;
-		if(tokens[2] != "Finished") {
-			String[] prog = tokens[3].split("/");
-			progress = Double.valueOf(prog[0]) / Double.valueOf(prog[1]);
-		}
-		GeEvent.Type type = tokens[2] == "Bought" || tokens[3] == "buying" 
-				? GeEvent.Type.BUY : GeEvent.Type.SELL;
-		String name = e.text().substring(e.text().indexOf('x') + 2);
-		dispatch(new GeEvent(name, progress), type);
-	}
-	
-	private void dispatch(final GeEvent event, final GeEvent.Type type) {
-		for(EventListener l : ctx.dispatcher) {
-			if(!(l instanceof GeListener))
-				continue;
-			GeListener listener = (GeListener) l;
-			switch(type) {
-				case BUY:
-					listener.onBuy(event);
-					break;
-				case SELL:
-					listener.onSell(event);
-					break;
-			}
-		}
 	}
 }
