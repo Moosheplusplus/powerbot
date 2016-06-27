@@ -26,7 +26,7 @@ public class Component extends Interactive {
 	private Component[] sparseCache;
 
 	Component(final ClientContext ctx, final Widget widget, final int index) {
-		this(ctx, widget, null, index);
+		this(ctx, widget, new Component(ctx, widget, -1), index);
 	}
 
 	Component(final ClientContext ctx, final Widget widget, final Component component, final int index) {
@@ -322,7 +322,7 @@ public class Component extends Interactive {
 	@Override
 	public boolean valid() {
 		final org.powerbot.bot.rt4.client.Widget internal = getInternal();
-		return internal != null && (component == null || component.visible()) &&
+		return internal != null && (component.index() == -1 || component.visible()) &&
 				id() != -1 && internal.getBoundsIndex() != -1;
 	}
 

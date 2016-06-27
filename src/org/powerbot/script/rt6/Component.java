@@ -26,7 +26,7 @@ public class Component extends Interactive implements Drawable, Displayable, Ide
 	private final int index;
 
 	public Component(final ClientContext ctx, final org.powerbot.script.rt6.Widget widget, final int index) {
-		this(ctx, widget, null, index);
+		this(ctx, widget, new Component(ctx, widget, -1), index);
 	}
 
 	public Component(final ClientContext ctx, final org.powerbot.script.rt6.Widget widget, final Component parent, final int index) {
@@ -404,7 +404,7 @@ public class Component extends Interactive implements Drawable, Displayable, Ide
 	@Override
 	public boolean valid() {
 		final Widget internal = getInternalComponent();
-		return internal != null && (parent == null || parent.visible()) &&
+		return internal != null && (parent.index() == -1 || parent.visible()) &&
 				id() != -1 && internal.getBoundsArrayIndex() != -1;
 	}
 
@@ -462,7 +462,7 @@ public class Component extends Interactive implements Drawable, Displayable, Ide
 
 	private Widget getInternalComponent() {
 		final Object[] components;
-		if (parent != null) {
+		if (parent.index() != -1) {
 			final Widget parentComponent = parent.getInternalComponent();
 			components = parentComponent != null ? parentComponent.getComponents() : null;
 		} else {
@@ -474,7 +474,7 @@ public class Component extends Interactive implements Drawable, Displayable, Ide
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "[" + index + (parent != null ? "/" + parent : "") + "]@" + widget;
+		return getClass().getSimpleName() + "[" + index + (parent.index() != -1 ? "/" + parent : "") + "]@" + widget;
 	}
 
 	@Override
@@ -489,6 +489,6 @@ public class Component extends Interactive implements Drawable, Displayable, Ide
 		}
 		final Component c = (Component) o;
 		return c.widget.equals(widget) && c.index == index &&
-				(parent == null && c.parent == null || (parent != null && parent.equals(c.parent)));
+				(parent.index() == -1 && c.parent.index() == -1 || (parent.index() != -1 && parent.equals(c.parent)));
 	}
 }
