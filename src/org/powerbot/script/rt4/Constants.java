@@ -20,6 +20,7 @@ public final class Constants {
 	public static final int BANK_TABS = 867;
 	public static final int BANK_TABS_HIDDEN = 0xc0000000;
 	public static final int BANK_STATE = 115;
+	public static final int BANKPIN_WIDGET = 213;
 
 	public static final int DEPOSITBOX_WIDGET = 192;
 	public static final int DEPOSITBOX_CLOSE = 11;
