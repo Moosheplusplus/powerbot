@@ -26,6 +26,8 @@ public class BankPin extends PollingScript<ClientContext> {
 				threshold.remove(this);
 			return;
 		}
+		if(!threshold.contains(this))
+			threshold.add(this);
 		for(final Component c : ctx.widgets.widget(Constants.BANKPIN_WIDGET)
 				.components()) {
 			final Component child = c.component(1);
