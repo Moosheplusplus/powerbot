@@ -35,7 +35,7 @@ public class BankPin extends PollingScript<ClientContext> {
 			if(c.visible() && c.textColor() == 0 && c.width() == 64 &&
 					c.height() == 64 && c.componentCount() == 2 &&
 					text.equals(pin.charAt(count % 4)+"")) {
-				if(child.click()) {
+				if(c.click()) {
 					count++;
 					Condition.wait(new Condition.Check() {
 						public boolean poll() {
