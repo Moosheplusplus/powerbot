@@ -98,7 +98,11 @@ public class Game extends ClientAccessor {
 		}
 		return null;
 	}
-
+	
+	public boolean multiCombat() {
+		return ctx.varpbits.varpbit(1021) == 0x20;
+	}
+	
 	public boolean loggedIn() {
 		final int c = clientState();
 		return c == Constants.GAME_LOADED || c == Constants.GAME_LOADING;
