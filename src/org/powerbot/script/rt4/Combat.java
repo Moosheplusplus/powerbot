@@ -3,7 +3,6 @@ package org.powerbot.script.rt4;
 import java.util.concurrent.Callable;
 
 import org.powerbot.script.Condition;
-import org.powerbot.script.StringUtils;
 
 /**
  * Combat
@@ -15,7 +14,7 @@ public class Combat extends ClientAccessor {
 	}
 
 	public int health() {
-		return StringUtils.parseInt(ctx.widgets.component(160, 5).text());
+		return ctx.skills.level(Constants.SKILLS_HITPOINTS);
 	}
 
 	public int specialPercentage() {
