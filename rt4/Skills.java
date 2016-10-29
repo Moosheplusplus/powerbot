@@ -107,4 +107,18 @@ public class Skills extends ClientAccessor {
 		}
 		return Constants.SKILLS_XP[level];
 	}
+    
+    /**
+	 * Determines total skill levels of your player
+	 * 
+	 * @return total levels your player has
+	 */
+	public int totalLevels() {
+		try {
+			return Integer.parseInt(ctx.widgets.component(320, 27).text().replace("Total level:<br>", ""));
+		} catch (NumberFormatException e) {
+			return 0;
+		}
+	}
+    
 }
