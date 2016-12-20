@@ -535,7 +535,7 @@ public class Bank extends ItemQuery<Item> implements Viewable {
 	 * @return <tt>true</tt> if the button was clicked, not if the inventory is empty; otherwise <tt>false</tt>
 	 */
 	public boolean depositInventory() {
-		return ctx.backpack.select().isEmpty() || ctx.widgets.component(Constants.BANK_WIDGET, Constants.BANK_DEPOSIT_INVENTORY).click();
+		return ctx.backpack.get().isEmpty() || ctx.widgets.component(Constants.BANK_WIDGET, Constants.BANK_DEPOSIT_INVENTORY).click();
 	}
 
 	/**

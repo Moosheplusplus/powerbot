@@ -504,7 +504,7 @@ public class Bank extends ItemQuery<Item> {
 	 * @return <tt>true</tt> if deposit inventory button was clicked successfully; otherwise <tt>false</tt>
 	 */
 	public boolean depositInventory() {
-		return ctx.widgets.widget(Constants.BANK_WIDGET).component(Constants.BANK_DEPOSIT_INVENTORY).interact("Deposit");
+		return ctx.inventory.get().isEmpty() || ctx.widgets.widget(Constants.BANK_WIDGET).component(Constants.BANK_DEPOSIT_INVENTORY).interact("Deposit");
 	}
 
 	/**
