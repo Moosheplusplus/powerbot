@@ -42,7 +42,7 @@ public class BankPin extends PollingScript<ClientContext> {
 			}
 			//TODO: re-evaluate this to get rid of count; or fail out
 			final String text = child.text();
-			if (text.equals(""+pin.charAt(count % 4))) {
+			if (text.equals("" + pin.charAt(count % 4))) {
 				if (c.click()) {
 					count++;
 					Condition.wait(new Condition.Check() {
